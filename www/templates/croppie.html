@@ -1,0 +1,15 @@
+<ion-view view-title="Croppie">
+    <ion-content style="padding-top: 20px">
+        <div ng-show="show" style="width: 100%; height: 350px;">
+            <div id="image-preview">
+            </div>
+        </div>
+        <div style="text-align: center;">
+        	<h4 ng-show="!show" >Select an option!</h4>
+	        <button class="button button-balanced icon ion-camera" ng-click="camera()"></button>
+	        <button class="button button-balanced icon ion-images" ng-click="gallery()"></button>
+	        <button class="button button-balanced icon ion-refresh" ng-show="show" ng-click="rotate()"></button>
+	        <button class="button button-balanced" ng-show="show" ng-click="next()">Next</button>
+        </div>
+    </ion-content>
+</ion-view>
