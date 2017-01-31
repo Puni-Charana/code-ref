@@ -54,7 +54,7 @@ angular.module('starter.controllers', [])
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {})
 .controller('CroppieCtrl', function($scope, $timeout, $cordovaImagePicker, $cordovaCamera, $http, $ionicLoading, $ionicModal) {
-    document.addEventListener("deviceready", function () {
+    // document.addEventListener("deviceready", function () {
         var el = document.getElementById('image-preview');
         var feedUploader = null;
         var imgUrl = null; // User selected image
@@ -68,6 +68,11 @@ angular.module('starter.controllers', [])
 
         // Show/Hide next, rotate, and label
         $scope.show = false;
+
+        // Default selected category
+        $scope.feed = {
+            category:"Make-up"
+        }
 
         // Default option for croppie
         feedUploader = new Croppie(el, {
@@ -178,6 +183,7 @@ angular.module('starter.controllers', [])
             $scope.modal = modal;
         });
 
+
         // Triggered in the feed modal to close it
         $scope.closeFeedModal = function() {
             $scope.modal.hide();
@@ -199,37 +205,68 @@ angular.module('starter.controllers', [])
             });
         }
 
+        function validate_link(link){
+
+            var patt = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+            var result = patt.exec(link);
+
+            if(result!=null){
+                return result[0];
+            }else{
+                return false;
+            }
+        }
+
 
          // Triggered in the feed modal to close it
-        $scope.uploadFeed = function(description) {
-            // Continue only if description, and base64ImageData is present
-            if(description && $scope.base64ImageData){
-                $ionicLoading.show();
+        $scope.uploadFeed = function(feed) {
 
-                // Upload to server
-                $http({
-                    method: 'POST',
-                    url: 'http://139.162.27.64/api/image-upload-base64',
-                    data: {
-                        imgType : 'feeds',
-                        path : 'feed-id',
-                        img : $scope.base64ImageData
-                    }
-                }).then(function successCallback(response) {
-                    $ionicLoading.hide();
-                    $timeout(function(){
-                        $scope.closeFeedModal();
-                        alert(response.data.imageName);
-                        // TODO
-                        // Upload data to firbase
-                    });
-                }, function errorCallback(error) {
-                    $ionicLoading.hide();
-                    alert("Please check your internet connection try again.");
-                });
+            if(feed.link){
+                if(validate_link(feed.link)){
+                    feed.link = validate_link(feed.link);
+                }else{
+                    // Not a valid link
+                    alert("Please enter a valid link");
+                    return;
+                }
             }else{
-                alert("Please try again.");
+                delete feed.link;
             }
+            console.log(feed);
+
+            var re = /#(\w+)(?!\w)/g, hashTag, tagsValue = [];
+            while (hashTag = re.exec(feed.description)) {
+                tagsValue.push(hashTag[1]);
+            }
+            console.log(tagsValue);
+            alert(JSON.stringify(tagsValue));
+            alert(JSON.stringify(feed));
+            return;
+            // Continue only if description, and base64ImageData is present
+            $ionicLoading.show();
+
+            // Upload to server
+            $http({
+                method: 'POST',
+                url: 'http://139.162.27.64/api/image-upload-base64',
+                data: {
+                    imgType : 'feeds',
+                    path : 'feed-id',
+                    img : $scope.base64ImageData
+                }
+            }).then(function successCallback(response) {
+                $ionicLoading.hide();
+                $timeout(function(){
+                    $scope.closeFeedModal();
+                    alert(response.data.imageName);
+                    // TODO
+                    // Upload data to firbase
+                });
+            }, function errorCallback(error) {
+                $ionicLoading.hide();
+                alert("Please check your internet connection try again.");
+            });
+            
         };
-    }, false);
+    // }, false);
 })

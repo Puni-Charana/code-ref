@@ -6,8 +6,48 @@
     <ion-content style="width: 100%; text-align:center;">
         <div style="width: 80%; margin: 0 auto;">
             <img style="width: 100%; max-width: 500px;" ng-src="{{base64ImageData}}">
-            <textarea style="padding: 10px; border: 1px solid #eee; width: 100%;" ng-model="description" rows="4" placeholder="Add Your Post Description"></textarea>
-            <button ng-disabled="!description" ng-click="uploadFeed(description)" class="button button-block button-positive">Upload</button>
+            <div class="list">
+                <label class="item item-input item-select">
+                    <div class="input-label">
+                        Category
+                    </div>
+                    <select ng-model="feed.category">
+                        <option value="Hair Cut and Styling">Hair Cut and Styling</option>
+                        <option value="Hair Care">Hair Care</option>
+                        <option value="Face Care">Face Care</option>
+                        <option value="Make-up">Make-up</option>
+                        <option value="Weight management">Weight management</option>
+                        <option value="Fitness & Body Building">Fitness & Body Building</option>
+                        <option value="Bridal">Bridal</option>
+                        <option value="Tattoos and Piercings">Tattoos and Piercings</option>
+                        <option value="">Body Care</option>
+                        <option value="Body Care">Spa and massages</option>
+                        <option value="Kids">Kids</option>
+                        <option value="Men’s Grooming">Men’s Grooming</option>
+                        <option value="Fashion">Fashion</option>
+                        <option value="Nail Art">Nail Art</option>
+                        <option value="Treatments">Treatments</option>
+                        <option value="Diet and Nutrition">Diet and Nutrition</option>
+                        <option value="Managing Diabetes">Managing Diabetes</option>
+                        <option value="Healthy Habits">Healthy Habits</option>
+                        <option value="Healthy Recipes">Healthy Recipes</option>
+                        <option value="Motivation">Motivation</option>
+                        <option value="Home Remedies">Home Remedies</option>
+                        <option value="Holistic Wellness">Holistic Wellness</option>
+                        <option value="Ayurveda">Ayurveda</option>
+                        <option value="Celebrity Trends">Celebrity Trends</option>
+                        <option value="Lifestyle  trends">Lifestyle  trends</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </label>
+                <label class="item item-input">
+                    <textarea ng-model="feed.description" rows="4" placeholder="Add description & #tags"></textarea>
+                </label>
+                <label class="item item-input">
+                    <input ng-model="feed.link" type="text" placeholder="Enter a link to your blog (Optional)">
+                </label>
+            </div>
+            <button ng-disabled="!feed.description || !feed.category" ng-click="uploadFeed(feed)" class="button button-block button-positive">Upload</button>
         </div>
     </ion-content>
 </ion-modal-view>
